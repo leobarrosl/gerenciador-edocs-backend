@@ -1,98 +1,384 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Gerenciador E-Docs
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+REST API for managing electronic documents with dynamic template support and PDF generation.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Table of Contents
 
-## Description
+- [About](#about)
+- [Tech Stack](#tech-stack)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Running the Project](#running-the-project)
+- [Project Structure](#project-structure)
+- [Database](#database)
+- [Authentication](#authentication)
+- [API Endpoints](#api-endpoints)
+- [Template & Variable System](#template--variable-system)
+- [PDF Generation](#pdf-generation)
+- [Testing](#testing)
+- [Available Scripts](#available-scripts)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+---
 
-## Project setup
+## About
 
-```bash
-$ npm install
-```
+**Gerenciador E-Docs** is a backend system for creating and managing electronic documents based on templates. Key features:
 
-## Compile and run the project
+- Create **HTML templates** with dynamic variable placeholders (e.g., contracts, certificates, invoices)
+- Generate **documents** from templates by filling in variables with custom values
+- Export any document as a **downloadable PDF**
+- Secure access management via JWT authentication
 
-```bash
-# development
-$ npm run start
+**Example use case:** A contract template with variables `{{clientName}}`, `{{startDate}}`, and `{{amount}}` can be instantiated to generate dozens of personalized documents, each exportable as a PDF.
 
-# watch mode
-$ npm run start:dev
+---
 
-# production mode
-$ npm run start:prod
-```
+## Tech Stack
 
-## Run tests
+| Category | Technology |
+|---|---|
+| Framework | [NestJS](https://nestjs.com/) v11 |
+| Language | TypeScript 5 |
+| Database | PostgreSQL |
+| ORM | Prisma 7 |
+| Authentication | Passport.js + JWT |
+| Password hashing | Argon2 |
+| PDF generation | Puppeteer 24 |
+| Validation | class-validator + class-transformer |
+| Testing | Jest |
 
-```bash
-# unit tests
-$ npm run test
+---
 
-# e2e tests
-$ npm run test:e2e
+## Prerequisites
 
-# test coverage
-$ npm run test:cov
-```
+- [Node.js](https://nodejs.org/) >= 18
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+- [PostgreSQL](https://www.postgresql.org/) >= 14 running locally or on an accessible server
 
-## Deployment
+---
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## Installation
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Clone the repository
+git clone https://github.com/your-username/gerenciador-edocs.git
+cd gerenciador-edocs
+
+# Install dependencies
+npm install
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+---
 
-## Resources
+## Configuration
 
-Check out a few resources that may come in handy when working with NestJS:
+Create a `.env` file in the project root with the following variables:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```env
+# PostgreSQL connection string
+DATABASE_URL="postgresql://user:password@localhost:5432/gerenciador_edoc"
 
-## Support
+# Secret used to sign JWT tokens — use a strong value in production
+JWT_SECRET="change-this-in-production"
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+# JWT token expiration time
+JWT_EXPIRES_IN="7d"
+```
 
-## Stay in touch
+> **Warning:** Never commit the `.env` file to the repository. It is already listed in `.gitignore`.
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+---
+
+## Running the Project
+
+```bash
+# Apply migrations and generate the Prisma Client
+npx prisma migrate deploy
+npx prisma generate
+
+# Development mode (hot reload)
+npm run start:dev
+
+# Production mode
+npm run build
+npm run start:prod
+```
+
+The API will be available at `http://localhost:3000`.
+
+---
+
+## Project Structure
+
+```
+gerenciador-edocs/
+├── src/
+│   ├── main.ts                   # Entry point — bootstraps the app
+│   ├── app.module.ts             # Root module
+│   ├── auth/                     # Authentication (register, login, guards)
+│   │   ├── strategies/           # Passport strategies (local + JWT)
+│   │   ├── guards/               # Route guards
+│   │   └── dto/
+│   ├── users/                    # User management
+│   │   └── dto/
+│   ├── templates/                # Document template CRUD
+│   │   └── dto/
+│   ├── documents/                # Document creation and retrieval
+│   │   ├── dto/
+│   │   └── entities/
+│   ├── pdf/                      # PDF generation with Puppeteer
+│   └── prisma/                   # Prisma Client wrapper
+├── prisma/
+│   ├── schema.prisma             # Data model definitions
+│   └── migrations/               # Migration history
+├── docs/
+│   └── overview.md               # Additional technical documentation
+├── test/                         # E2E tests
+└── package.json
+```
+
+---
+
+## Database
+
+The project uses PostgreSQL with Prisma as the ORM.
+
+### Entity Diagram
+
+```
+┌─────────────┐       ┌──────────────────┐       ┌───────────────┐
+│    users    │       │    templates     │       │   documents   │
+│─────────────│       │──────────────────│       │───────────────│
+│ id (UUID)   │──┐    │ id (UUID)        │──┐    │ id (UUID)     │
+│ name        │  │    │ name             │  │    │ templateId FK │
+│ email       │  └───>│ userId FK        │  └───>│ userId FK     │
+│ passwordHash│       │ content (HTML)   │       │ content       │
+│ createdAt   │       │ variables (JSON) │       │ values (JSON) │
+│ updatedAt   │       │ pdfOptions (JSON)│       │ createdAt     │
+└─────────────┘       │ createdAt        │       │ updatedAt     │
+                      │ updatedAt        │       └───────────────┘
+                      ┴──────────────────┘
+```
+
+### Prisma Commands
+
+```bash
+# Create a new migration after changing the schema
+npx prisma migrate dev --name migration-name
+
+# Apply migrations in production
+npx prisma migrate deploy
+
+# Open the Prisma database GUI
+npx prisma studio
+```
+
+---
+
+## Authentication
+
+The API uses **JWT (JSON Web Token)**. Protected routes require the token in the `Authorization: Bearer <token>` header.
+
+### Register
+
+```http
+POST /auth/register
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "mypassword123"
+}
+```
+
+### Login
+
+```http
+POST /auth/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "mypassword123"
+}
+```
+
+**Response:**
+```json
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
+---
+
+## API Endpoints
+
+### Authentication
+
+| Method | Route | Description | Auth |
+|---|---|---|---|
+| `POST` | `/auth/register` | Create a new user account | No |
+| `POST` | `/auth/login` | Authenticate and get JWT token | No |
+
+---
+
+### Templates
+
+| Method | Route | Description | Auth |
+|---|---|---|---|
+| `GET` | `/templates` | List templates with pagination and search | Yes |
+| `GET` | `/templates/:id` | Get a specific template | Yes |
+| `POST` | `/templates` | Create a new template | Yes |
+| `PATCH` | `/templates/:id` | Update a template | Yes |
+| `DELETE` | `/templates/:id` | Delete a template | Yes |
+
+**Query params — `GET /templates`:**
+
+| Parameter | Type | Description |
+|---|---|---|
+| `page` | number | Page number (default: 1) |
+| `size` | number | Items per page (default: 10) |
+| `search` | string | Search by template name |
+| `userId` | string | Filter by creator |
+
+**Request body — `POST /templates`:**
+
+```json
+{
+  "name": "Service Agreement",
+  "content": "<h1>Agreement</h1><p>Client: {{clientName}}</p><p>Amount: {{amount}}</p>",
+  "variables": [
+    { "key": "clientName", "label": "Client Name", "defaultValue": "" },
+    { "key": "amount",     "label": "Amount",      "defaultValue": "$0.00" }
+  ],
+  "pdfOptions": {
+    "format": "A4",
+    "margin": { "top": "2cm", "bottom": "2cm", "left": "2cm", "right": "2cm" },
+    "printBackground": true
+  }
+}
+```
+
+---
+
+### Documents
+
+| Method | Route | Description | Auth |
+|---|---|---|---|
+| `GET` | `/documents` | List documents with pagination and filters | Yes |
+| `GET` | `/documents/:id` | Get a specific document | Yes |
+| `GET` | `/documents/generate/:id` | Generate and download document as PDF | Yes |
+| `POST` | `/documents` | Create a document from a template | Yes |
+| `DELETE` | `/documents/:id` | Delete a document | Yes |
+
+**Query params — `GET /documents`:**
+
+| Parameter | Type | Description |
+|---|---|---|
+| `page` | number | Page number |
+| `size` | number | Items per page |
+| `initialDate` | string | Start of date filter (ISO 8601) |
+| `finalDate` | string | End of date filter (ISO 8601) |
+| `templateId` | string | Filter by template |
+
+**Request body — `POST /documents`:**
+
+```json
+{
+  "templateId": "template-uuid",
+  "values": [
+    { "key": "clientName", "value": "Acme Corp" },
+    { "key": "amount",     "value": "$5,000.00" }
+  ]
+}
+```
+
+---
+
+## Template & Variable System
+
+Templates use `{{key}}` syntax to define dynamic variable placeholders in HTML content.
+
+**Template example:**
+
+```html
+<html>
+  <body>
+    <h1>Certificate of Completion</h1>
+    <p>This certifies that <strong>{{studentName}}</strong> has completed the <strong>{{courseName}}</strong> course.</p>
+    <p>Completion date: {{completionDate}}</p>
+  </body>
+</html>
+```
+
+**Variable definitions stored in the template:**
+
+```json
+[
+  { "key": "studentName",    "label": "Student Name",    "defaultValue": "" },
+  { "key": "courseName",     "label": "Course Name",     "defaultValue": "" },
+  { "key": "completionDate", "label": "Completion Date", "defaultValue": "" }
+]
+```
+
+When a document is created, each `{{key}}` in the content is replaced by the corresponding entry in `values`. If a value is not provided, the template's `defaultValue` is used.
+
+---
+
+## PDF Generation
+
+The `GET /documents/generate/:id` endpoint renders the document's HTML to a PDF using **Puppeteer** (headless Chromium) and returns the file as a direct download.
+
+Rendering options are configured per template in the `pdfOptions` field:
+
+```json
+{
+  "format": "A4",
+  "printBackground": true,
+  "margin": {
+    "top": "2cm",
+    "right": "2cm",
+    "bottom": "2cm",
+    "left": "2cm"
+  }
+}
+```
+
+---
+
+## Testing
+
+```bash
+# Unit tests
+npm run test
+
+# E2E tests
+npm run test:e2e
+
+# Test coverage report
+npm run test:cov
+```
+
+---
+
+## Available Scripts
+
+| Script | Description |
+|---|---|
+| `npm run start:dev` | Start in development mode with hot reload |
+| `npm run start:prod` | Start in production mode |
+| `npm run build` | Compile TypeScript to JavaScript |
+| `npm run test` | Run unit tests |
+| `npm run test:e2e` | Run end-to-end tests |
+| `npm run test:cov` | Generate test coverage report |
+| `npm run lint` | Check for lint issues |
+| `npm run format` | Format code with Prettier |
+
+---
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+This project is licensed under the MIT License.
